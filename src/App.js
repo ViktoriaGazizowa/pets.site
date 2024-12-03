@@ -1,24 +1,27 @@
-import logo from './logo.svg';
-import './App.css';
-
+import Header from "./components/header";
+import first from "./components/first";
+import First from "./components/first";
+import {Routes, Route} from "react-router-dom";
+import MainPage from "./page/mainPage";
+import qwe from "./page/qwe.css"
+import Footer2 from "./components/footer2";
+import LiKabinet from "./page/LiKabinet";
+import Add_pet2 from "./page/Add_pet2";
+import Poisk from "./components/poisk";
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="w-100">
+    <Header />
+    <div >
+      <Routes> 
+        <Route path="/" element={<MainPage />} />
+        <Route path="/LiKabinet" element={<LiKabinet />} />
+        <Route path="/Add_pet2" element={<Add_pet2 />} />
+         <Route path="/Search" element={<Poisk />} /> 
+      </Routes>
     </div>
+    <Footer2 /> 
+  </div>
   );
 }
 
