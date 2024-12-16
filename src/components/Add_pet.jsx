@@ -1,86 +1,174 @@
+import React, { useState } from 'react';
+
 function Add_pet () {
-    return (  <div>
-  {/* Кнопка для открытия модального окна */}
-  <center><button type="button" className="btn btn-primary" data-toggle="modal" data-target="#loginModal">
-      Зарегистрироваться
-    </button> </center>
-  {/* Модальное окно */}
-  <div className="modal fade" id="loginModal" tabIndex={-1} role="dialog" aria-labelledby="loginModalLabel" aria-hidden="true">
-    <div className="modal-dialog" role="document">
-      <div className="modal-content">
-        <div className="modal-header">
-          <h5 className="modal-title" id="loginModalLabel">Вход в личный кабинет</h5>
-          <button type="button" className="close" data-dismiss="modal" aria-label="Закрыть">
-            <span aria-hidden="true">×</span>
-          </button>
-        </div>
-        <div className="modal-body">
-          <form id="loginForm">
-            <div className="form-group">
-              <label htmlFor="username">Номер</label>
-              <input type="text" className="form-control" id="username" placeholder="Введите номер" required />
+  const [register, setRegister] = useState(false); // состояние для выбора регистрации
+  const [showPasswordFields, setShowPasswordFields] = useState(false); // скрытие/показ пароля
+
+  // Функция для обработки выбора регистрации
+  const handleRegisterChange = (e) => {
+    setRegister(e.target.checked);
+    if (!e.target.checked) {
+      setShowPasswordFields(false);
+    }
+  };
+
+  return (
+    <div>
+      <center><button className="btn btn-primary" data-bs-toggle="modal" data-bs-target="#registrationModal">Зарегистрироваться</button></center>
+
+      <div className="container">
+        <h1>Добавить объявление о животном</h1>
+        <form id="add-listing-form">
+          {/* Имя пользователя */}
+          <div className="form-group">
+            <label htmlFor="name">Имя пользователя:</label>
+            <input
+              type="text"
+              id="name"
+              name="name"
+              required
+              pattern="^[а-яА-ЯёЁ\s-]+$"
+              title="Имя может содержать только кириллицу, пробелы и дефисы."
+            />
+          </div>
+
+          {/* Телефон */}
+          <div className="form-group">
+            <label htmlFor="phone">Телефон:</label>
+            <input
+              type="text"
+              id="phone"
+              name="phone"
+              required
+              pattern="^\+?\d+$"
+              title="Телефон должен содержать только цифры и может начинаться с +."
+            />
+          </div>
+
+          {/* Email */}
+          <div className="form-group">
+            <label htmlFor="email">Email:</label>
+            <input
+              type="email"
+              id="email"
+              name="email"
+              required
+            />
+          </div>
+
+          {/* Регистрация */}
+          <div className="form-group">
+            <label>
+              <input
+                type="checkbox"
+                name="register"
+                onChange={handleRegisterChange}
+              />
+              Регистрация
+            </label>
+          </div>
+
+          {/* Поля для пароля и его подтверждения */}
+          {register && (
+            <div>
+              <div className="form-group">
+                <label htmlFor="password">Пароль:</label>
+                <input
+                  type="password"
+                  id="password"
+                  name="password"
+                  required
+                  minLength="7"
+                  pattern=".*[a-z].*"
+                  pattern=".*[A-Z].*"
+                  pattern=".*\d.*"
+                  title="Пароль должен содержать не менее 7 символов, включая хотя бы одну цифру, одну строчную и одну заглавную букву."
+                />
+              </div>
+
+              <div className="form-group">
+                <label htmlFor="password_confirmation">Подтверждение пароля:</label>
+                <input
+                  type="password"
+                  id="password_confirmation"
+                  name="password_confirmation"
+                  required
+                />
+              </div>
             </div>
-            <div className="form-group">
-              <label htmlFor="password">Пароль</label>
-              <input type="password" className="form-control" id="password" placeholder="Введите пароль" required />
-            </div>
-            <div className="form-check">
-              <input type="checkbox" className="form-check-input" id="rememberMe" />
-              <label className="form-check-label" htmlFor="rememberMe">Запомнить меня</label>
-            </div>
-          </form>
-        </div>
-        <div className="modal-footer">
-          <button type="button" className="btn btn-secondary" data-dismiss="modal">Закрыть</button>
-          <button type="button" className="btn btn-primary" onclick="login()">Войти</button>
-        </div>
+          )}
+
+          {/* Фото животного */}
+          <div className="form-group">
+            <label htmlFor="photo1">Фото животного:</label>
+            <input
+              type="file"
+              id="photo1"
+              name="photo1"
+              accept="image/*"
+              required
+            />
+          </div>
+
+          {/* Дополнительные фото */}
+          <div className="form-group">
+            <label htmlFor="photo2">Дополнительное фото (необязательно):</label>
+            <input
+              type="file"
+              id="photo2"
+              name="photo2"
+              accept="image/*"
+            />
+          </div>
+          <div className="form-group">
+            <label htmlFor="photo3">Дополнительное фото (необязательно):</label>
+            <input
+              type="file"
+              id="photo3"
+              name="photo3"
+              accept="image/*"
+            />
+          </div>
+
+          {/* Клеймо */}
+          <div className="form-group">
+            <label htmlFor="mark">Клеймо (необязательно):</label>
+            <input
+              type="text"
+              id="mark"
+              name="mark"
+            />
+          </div>
+
+          {/* Описание */}
+          <div className="form-group">
+            <label htmlFor="description">Описание:</label>
+            <textarea
+              id="description"
+              name="description"
+              rows={4}
+              required
+            />
+          </div>
+
+          {/* Подтверждение согласия на обработку персональных данных */}
+          <div className="form-group">
+            <label>
+              <input
+                type="checkbox"
+                name="confirm"
+                required
+              />
+              Я согласен на обработку персональных данных
+            </label>
+          </div>
+
+          {/* Кнопка отправки */}
+          <button type="submit">Добавить объявление</button>
+        </form>
       </div>
     </div>
-  </div>
-  <div className="container">
-    <h1>Добавить объявление о животном</h1>
-    <form id="add-listing-form">
-      <div className="form-group">
-        <label htmlFor="animal-name">Имя животного:</label>
-        <input type="text" id="animal-name" name="animal-name" required />
-      </div>
-      <div className="form-group">
-        <label htmlFor="chip-number">Номер чипа:</label>
-        <input type="text" id="chip-number" name="chip-number" required />
-      </div>
-      <div className="form-group">
-        <label htmlFor="region">Район:</label>
-        <input type="text" id="region" name="region" required />
-      </div>
-      <div className="form-group">
-        <label htmlFor="date">Дата:</label>
-        <input type="date" id="date" name="date" required />
-      </div>
-      <div className="form-group">
-        <label htmlFor="animal-type">Вид животного:</label>
-        <select id="animal-type" name="animal-type" required>
-          <option value>Выберите вид</option>
-          <option value="собака">Собака</option>
-          <option value="кошка">Кошка</option>
-          <option value="птица">Птица</option>
-          <option value="грызун">Грызун</option>
-          <option value="рептилия">Рептилия</option>
-          <option value="другое">Другое</option>
-        </select>
-      </div>
-      <div className="form-group">
-        <label htmlFor="animal-photo">Фото животного:</label>
-        <input type="file" id="animal-photo" name="animal-photo" accept="image/*" required />
-      </div>
-      <div className="form-group">
-        <label htmlFor="description">Описание:</label>
-        <textarea id="description" name="description" rows={4} required defaultValue={""} />
-      </div>
-      <button type="submit">Добавить объявление</button>
-    </form>
-  </div>
-</div>
-);
+  );
 }
 
-export default Add_pet ;
+export default Add_pet;

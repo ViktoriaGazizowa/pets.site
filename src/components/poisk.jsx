@@ -1,117 +1,140 @@
+import собака3 from './image/собака3.webp';
+import кошка4 from './image/кошка4.avif';
+import pop from './image/pop.png';
+import homyak from './image/homyak.JPG';
+
 import React, { useState } from 'react';
 
-function Poisk() {
 const ads = [
-      { id: 77, type: "Собака", description: "Собака рыжая, была утеряна в Красногвардейском районе", chipNumber: "ca-001-spb", region: "Красногвардейский", date: "12-10-2024", image: "image/собака3.webp" },
-      { id: 14, type: "Кошка", description: "Потерялась кошка, пушистая, серая. Любит играть, ласковая.", chipNumber: "ca-001-spb", region: "Василеостровский", date: "24-03-2020", image: "image/кошка4.avif" },
-      { id: 88, type: "Попугай", description: "Попугай, зеленый, потерян в центральной части города.", chipNumber: "po-004-spb", region: "Центральный", date: "28-10-2024", image: "image/попугай.png" },
-      { id: 99, type: "", description: "Грустный хомяк потерялся", chipNumber: "sv-101-spb", region: "Калининский", date: "10-11-2024", image: "image/homyak.jpg" },
-  ];
+    { id: 77, type: "Собака", description: "Собака рыжая, была утеряна в Красногвардейском районе", chipNumber: "ca-001-spb", region: "Красногвардейский", date: "12-10-2024", image: собака3 },
+    { id: 14, type: "Кошка", description: "Потерялась кошка, пушистая, серая. Любит играть, ласковая.", chipNumber: "ca-001-spb", region: "Василеостровский", date: "24-03-2020", image: кошка4 },
+    { id: 88, type: "Попугай", description: "Попугай, зеленый, потерян в центральной части города.", chipNumber: "po-004-spb", region: "Центральный", date: "28-10-2024", image: pop },
+    { id: 99, type: "Свинья", description: "Молодая свинья, была найдена на окраине города, в районе деревни.", chipNumber: "sv-101-spb", region: "Калининский", date: "10-11-2024", image: homyak },
+];
 
-  let currentPage = 1;
-  const itemsPerPage = 2;
+function Poisk() {
+    const [region, setRegion] = useState('');
+    const [animalType, setAnimalType] = useState('');
+    const [currentPage, setCurrentPage] = useState(1);
+    const [filteredAds, setFilteredAds] = useState(ads);
 
-  function displayAds(filteredAds) {
-      const adsContainer = document.getElementById('adsContainer');
-      adsContainer.innerHTML = '';
+    const itemsPerPage = 2;
 
-      if (filteredAds.length === 0) {
-          adsContainer.innerHTML = '<p>Объявлений не найдено.</p>';
-          return;
-      }
+    const getFilteredAds = () => {
+        const lowerCaseRegion = region.trim().toLowerCase();
+        const lowerCaseType = animalType.trim().toLowerCase();
 
-      const startIndex = (currentPage - 1) * itemsPerPage;
-      const endIndex = startIndex + itemsPerPage;
-      const adsToDisplay = filteredAds.slice(startIndex, endIndex);
+        return ads.filter(ad => {
+            const matchesRegion = lowerCaseRegion ? ad.region.toLowerCase().includes(lowerCaseRegion) : true;
+            const matchesType = lowerCaseType ? ad.type.toLowerCase().includes(lowerCaseType) : true;
+            return matchesRegion && matchesType;
+        });
+    };
 
-      adsToDisplay.forEach(ad => {
-          const adElement = document.createElement('div');
-          adElement.className = 'col-md-6 mb-4 pet-card';
-          adElement.innerHTML = `
-              <div class="card-body">
-                  <img src="${ad.image}" class="w-75" alt="${ad.type}">
-                  <p class="text-primary mt-3">id: ${ad.id}</p>
-                  <p><strong>Вид животного:</strong> ${ad.type}</p>
-                  <p><strong>Описание:</strong> ${ad.description}</p>
-                  <p><strong>Номер чипа:</strong> ${ad.chipNumber}</p>
-                  <p><strong>Район:</strong> ${ad.region}</p>
-                  <p><strong>Дата:</strong> ${ad.date}</p>
-              </div>
-          `;
-          adsContainer.appendChild(adElement);
-      });
+    const searchAds = (event) => {
+        event.preventDefault();
+        const filtered = getFilteredAds();
+        setFilteredAds(filtered);
+        setCurrentPage(1);
+    };
 
-      updatePagination(filteredAds.length);
-  }
+    const displayAds = () => {
+        const startIndex = (currentPage - 1) * itemsPerPage;
+        const adsToDisplay = filteredAds.slice(startIndex, startIndex + itemsPerPage);
 
-  function updatePagination(totalAds) {
-      const pagination = document.getElementById('pagination');
-      pagination.innerHTML = '';
+        return adsToDisplay.map(ad => (
+            <div className="col-md-6 mb-4 pet-card" key={ad.id}>
+                <div className="card-body">
+                    <img src={ad.image} className="w-75" alt={ad.type} />
+                    <p className="text-primary mt-3">id: {ad.id}</p>
+                    <p><strong>Вид животного:</strong> {ad.type}</p>
+                    <p><strong>Описание:</strong> {ad.description}</p>
+                    <p><strong>Номер чипа:</strong> {ad.chipNumber}</p>
+                    <p><strong>Район:</strong> {ad.region}</p>
+                    <p><strong>Дата:</strong> {ad.date}</p>
+                </div>
+            </div>
+        ));
+    };
 
-      const totalPages = Math.ceil(totalAds / itemsPerPage);
+    const updatePagination = () => {
+        const totalPages = Math.ceil(filteredAds.length / itemsPerPage);
+        const paginationItems = [];
 
-      const prevButton = document.createElement('li');
-      prevButton.className = 'page-item';
-      prevButton.innerHTML = `<a class="page-link" href="#" onclick="changePage(currentPage - 1)">Предыдущая</a>`;
-      pagination.appendChild(prevButton);
+        for (let i = 1; i <= totalPages; i++) {
+            paginationItems.push(
+                <li key={i} className={`page-item ${i === currentPage ? 'active' : ''}`}>
+                    <a className="page-link" href="#" onClick={() => setCurrentPage(i)}>{i}</a>
+                </li>
+            );
+        }
 
-      for (let i = 1; i <= totalPages; i++) {
-          const pageButton = document.createElement('li');
-          pageButton.className = 'page-item';
-          pageButton.innerHTML = `<a class="page-link" href="#" onclick="changePage(${i})">${i}</a>`;
-          pagination.appendChild(pageButton);
-      }
+        return paginationItems;
+    };
 
-      const nextButton = document.createElement('li');
-      nextButton.className = 'page-item';
-      nextButton.innerHTML = `<a class="page-link" href="#" onclick="changePage(currentPage + 1)">Следующая</a>`;
-      pagination.appendChild(nextButton);
-  }
+    return (
+        <div>
+            {/* Заголовок "Поиск по объявлениям" */}
+            <h2 className="text-center text-white bg-primary m-2 font-weight-bold" style={{ fontSize: '2rem' }}>
+                Поиск по объявлениям
+            </h2>
 
-  function changePage(pageNumber) {
-      const filteredAds = getFilteredAds();
-      const totalPages = Math.ceil(filteredAds.length / itemsPerPage);
-      if (pageNumber < 1) pageNumber = 1;
-      if (pageNumber > totalPages) pageNumber = totalPages;
-      currentPage = pageNumber;
-      displayAds(filteredAds);
-  }
+            <div className="search-box">
+                <h3>Поиск</h3>
+                <form id="searchForm" onSubmit={searchAds} className="needs-validation">
+                    {/* Поисковые строки без рамки */}
+                    <input
+                        type="text"
+                        id="regionInput"
+                        placeholder="Район"
+                        value={region}
+                        onChange={(e) => setRegion(e.target.value)}
+                        className="form-control mb-2"
+                        style={{
+                            width: '300px',
+                            fontSize: '1rem',
+                            border: 'none', // Убираем рамку
+                            boxShadow: 'none', // Убираем тень
+                            backgroundColor: '#f1f1f1', // Светлый фон для удобства
+                            padding: '10px', // Увеличим внутренние отступы для удобства
+                        }}
+                    />
+                    <input
+                        type="text"
+                        id="animalTypeInput"
+                        placeholder="Вид животного"
+                        value={animalType}
+                        onChange={(e) => setAnimalType(e.target.value)}
+                        className="form-control mb-2"
+                        style={{
+                            width: '300px',
+                            fontSize: '1rem',
+                            border: 'none', // Убираем рамку
+                            boxShadow: 'none', // Убираем тень
+                            backgroundColor: '#f1f1f1', // Светлый фон для удобства
+                            padding: '10px', // Увеличим внутренние отступы для удобства
+                        }}
+                    />
+                    <button type="submit" className="btn btn-primary">Найти</button>
+                </form>
+            </div>
 
-  function getFilteredAds() {
-      const region = document.getElementById('regionInput').value.trim().toLowerCase();
-      const animalType = document.getElementById('animalTypeInput').value.trim().toLowerCase();
-      return ads.filter(ad => {
-          const matchesRegion = region ? ad.region.toLowerCase().includes(region) : true;
-          const matchesType = animalType ? ad.type.toLowerCase().includes(animalType) : true;
-          return matchesRegion && matchesType;
-      });
-  }
+            {/* Добавляем заголовок над таблицей с результатами */}
+            <h3 className="text-center my-4">Результаты поиска</h3>
 
-  displayAds(ads);
+            <div className="container">
+                <div className="card-deck">
+                    {displayAds()}
+                </div>
+            </div>
 
-  function searchAds() {
-      const filteredAds = getFilteredAds();
-      currentPage = 1;
-      displayAds(filteredAds);
-  }
-    return ( <main style={{minHeight: '70vh'}}>
-  <h2 className="text-center text-white bg-primary m-2">Поиск по объявлениям</h2>
-  <div className="search-box">
-    <h3>Поиск</h3>
-    <input type="text" id="regionInput" placeholder="Район" />
-    <input type="text" id="animalTypeInput" placeholder="Вид животного" />
-    <button onclick="searchAds()">Найти</button>
-  </div>
-  <div className="container">
-    <div id="adsContainer" className="card-deck">
-    </div>
-  </div>
-  <nav aria-label="Page navigation example">
-    <ul className="pagination" id="pagination">
-    </ul>
-  </nav>
-</main>
- );
+            <nav aria-label="Page navigation example">
+                <ul className="pagination" id="pagination">
+                    {updatePagination()}
+                </ul>
+            </nav>
+        </div>
+    );
 }
 
 export default Poisk;

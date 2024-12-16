@@ -47,7 +47,7 @@
 
 /* Стили для формы */
 .form-group {
-    margin-bottom: 15px;
+    margin-bottom: 30px;
 }
 
 label {
@@ -103,4 +103,17 @@ button[type="submit"] {
 
 button[type="submit"]:hover {
     background-color: #218838;
+}
+
+.small-input {
+    width: 150px; /* Ширина полей ввода */
+    padding: 8px; /* Внутренние отступы */
+    margin-bottom: 15px; /* Отступ снизу для полей ввода */
+    border: 1px solid #ced4da; /* Граница полей ввода */
+    border-radius: 4px; /* Скругление углов полей ввода */
+}
+
+.small-input:focus {
+    border-color: #007bff; /* Цвет границы при фокусе */
+    outline: none; /* Убираем стандартный контур */
 }

@@ -1,10 +1,16 @@
-import Poisk from "../components/poisk";
+
+
+import AnimalCardsContainer from "../components/foundanimals";
+
+import "../page/qwe.css";
+
 
 function Search() {
     return (  
         <div>
-        <Poisk/>
-  
+   
+         <AnimalCardsContainer/>
+       
     </div>
     );
 }
