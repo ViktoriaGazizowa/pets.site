@@ -117,3 +117,21 @@ button[type="submit"]:hover {
     border-color: #007bff; /* Цвет границы при фокусе */
     outline: none; /* Убираем стандартный контур */
 }
+
+
+
+/* В qwe.css или другом подключаемом CSS файле */
+
+.card-custom {
+    height: 350px; /* Фиксированная высота для карточек */
+    width: 100%; /* 100% ширины родительского контейнера */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; /* Удобное распределение контента */
+  }
+  
+  .card-custom .card-body {
+    flex-grow: 1; /* Растягиваем тело карточки, чтобы оно заполнило пространство */
+  }
+  
+

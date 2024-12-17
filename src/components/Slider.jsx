@@ -89,7 +89,7 @@ function Slider() {
             data-bs-target="#carouselExampleIndicators"
             data-bs-slide="prev"
           >
-            <span className="carousel-control-prev-icon" aria-hidden="true" />
+            <span className="carousel-control-prev-icon" aria-hidden="tr  e" />
             <span className="visually-hidden">Предыдущий</span>
           </button>
           <button

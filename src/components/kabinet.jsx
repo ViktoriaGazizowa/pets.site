@@ -118,11 +118,13 @@ function Kabinet(props) {
                 )}
               </td>
               <td>
-                {!isEditingEmail ? (
-                  <button className="btn btn-warning" onClick={() => setIsEditingEmail(true)}>Изменить</button>
-                ) : (
-                  <button className="btn btn-success" onClick={saveChanges}>Сохранить</button>
-                )}
+                <div className="d-flex justify-content-between">
+                  {!isEditingEmail ? (
+                    <button className="btn btn-primary" onClick={() => setIsEditingEmail(true)}>Изменить</button> // Синий цвет
+                  ) : (
+                    <button className="btn btn-success" onClick={saveChanges}>Сохранить</button>
+                  )}
+                </div>
               </td>
             </tr>
             <tr>
@@ -140,11 +142,13 @@ function Kabinet(props) {
                 )}
               </td>
               <td>
-                {!isEditingPhone ? (
-                  <button className="btn btn-warning" onClick={() => setIsEditingPhone(true)}>Изменить</button>
-                ) : (
-                  <button className="btn btn-success" onClick={saveChanges}>Сохранить</button>
-                )}
+                <div className="d-flex justify-content-between">
+                  {!isEditingPhone ? (
+                    <button className="btn btn-primary" onClick={() => setIsEditingPhone(true)}>Изменить</button> // Синий цвет
+                  ) : (
+                    <button className="btn btn-success" onClick={saveChanges}>Сохранить</button>
+                  )}
+                </div>
               </td>
             </tr>
             <tr>
