@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import AnimalCardsContainer from "../components/foundanimals";
 import Card from "../components/card"; 
 import "../page/qwe.css";
 
@@ -75,8 +74,8 @@ function Search() {
                 <div className="row justify-content-center">
                     {currentAnimals.length > 0 ? (
                         currentAnimals.map((animal, index) => (
-                            <div className="col-md-6 mb-4" key={index}> {/* 2 карточки в ряду */}
-                                <Card data={animal} className="card-custom" /> {/* Применяем стиль карточки */}
+                            <div className="col-md-6 mb-4" key={index}>
+                                <Card data={animal} className="card-custom" />
                             </div>
                         ))
                     ) : (

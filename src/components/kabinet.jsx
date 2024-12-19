@@ -1,10 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom'; // Импортируем хук
 
-import cat from './image/кошка.jpg';
-import cat2 from './image/кошка2.jpg';
-import cat3 from './image/кошка4.avif';
-
 function Kabinet(props) {
   const navigate = useNavigate(); // Инициализируем хук навигации
 
@@ -167,42 +163,6 @@ function Kabinet(props) {
         {/* Кнопка "Выйти" */}
         <div className="text-center mt-3">
           <button className="btn text-white" style={{ backgroundColor: '#8B0000' }} onClick={handleLogout}>Выйти</button>
-        </div>
-      </div>
-
-      {/* Карточки с объявлениями */}
-      <div className="container mt-4">
-        <div className="card" data-title="Кошка" data-description="Потерялся кот в Приморском районе">
-          <img src={cat} alt="Карточка 1" />
-          <h3>Кошка</h3>
-          <p>Потерялась</p>
-          <button className="open-modal">Редактировать</button>
-          <br />
-          <button className="open-modal">Удалить</button>
-        </div>
-        <div className="card" data-title="Кошка" data-description="Потерялась кошка белая пушистая ласковая">
-          <img src={cat2} alt="Карточка 2" />
-          <h3>Кошка</h3>
-          <p>Потерялась</p>
-          <button className="open-modal">Редактировать</button>
-          <br />
-          <button className="open-modal">Удалить</button>
-        </div>
-        <div className="card" data-title="Кот" data-description="Потерялся кот очень грустный в Неском районе">
-          <img src={cat3} alt="Карточка 3" />
-          <h3>Кот</h3>
-          <p>Потерялся</p>
-          <button className="open-modal">Редактировать</button>
-          <br />
-          <button className="open-modal">Удалить</button>
-        </div>
-      </div>
-
-      <div className="modal" id="modal">
-        <div className="modal-content">
-          <span className="close">×</span>
-          <h2 id="modal-title" />
-          <p id="modal-description" />
         </div>
       </div>
     </div>

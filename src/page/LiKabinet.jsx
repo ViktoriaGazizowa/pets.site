@@ -2,7 +2,8 @@ import React, { useEffect, useState } from "react";
 
 
 import Kabinet from "../components/kabinet";
-import "../page/css.css";
+import MyAds from "../components/MyAds";
+
 
 const LiKabinet =  () => {
     let [user, setUser]=useState([]);
@@ -28,6 +29,7 @@ const LiKabinet =  () => {
     return ( 
         <div>
             <Kabinet data={user}/>
+            <MyAds/>
         </div>
      );
 }

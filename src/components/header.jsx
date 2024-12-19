@@ -1,11 +1,13 @@
-import лого from './image/лого.jpg';
-import React, { useState } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
+import лого from './image/лого.jpg';
 
 function Header() {
   const [user, setUser] = useState({ email: '', password: '' });
   const [errorMessage, setErrorMessage] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
+  const [suggestions, setSuggestions] = useState([]);
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -69,7 +71,49 @@ function Header() {
       });
   };
 
-  // Обработчик поиска
+  // Функция debounce
+  const debounce = (func, delay) => {
+    let timeout;
+    return (...args) => {
+      clearTimeout(timeout);
+      timeout = setTimeout(() => func(...args), delay);
+    };
+  };
+
+  // Функция для поиска
+  const searchAnimals = useCallback(
+    debounce(async (query) => {
+      if (query.length < 3) {
+        setSuggestions([]);
+        return;
+      }
+      setLoading(true);
+      try {
+        const response = await fetch(`https://pets.сделай.site/api/search?query=${query}`);
+        if (response.status === 200) {
+          const result = await response.json();
+          setSuggestions(result.data.orders || []);
+        } else {
+          setSuggestions([]);
+        }
+      } catch (error) {
+        console.error('Ошибка поиска:', error);
+        setSuggestions([]);
+      } finally {
+        setLoading(false);
+      }
+    }, 1000),
+    []
+  );
+
+  // Обработчик изменения поискового запроса
+  useEffect(() => {
+    if (searchQuery) {
+      searchAnimals(searchQuery);
+    }
+  }, [searchQuery, searchAnimals]);
+
+  // Обработчик отправки формы поиска
   const handleSearch = (e) => {
     e.preventDefault();
     if (searchQuery.trim()) {
@@ -99,21 +143,41 @@ function Header() {
                 <Link to="/registration" className={`nav-link ${isActive('/Registration') ? 'disabled' : ''}`} aria-current="page">Регистрация</Link>
               </li>
               <li className="nav-item">
-                <Link to="/Search" className={`nav-link ${isActive('/Search') ? 'disabled' : ''}`} aria-current="page">Поиск по объявлениям</Link>
+                <Link to="/Search2" className={`nav-link ${isActive('/Search2') ? 'disabled' : ''}`} aria-current="page">Поиск по объявлениям</Link>
               </li>
               <li className="nav-item">
                 <Link to="/Add_pet2" className={`nav-link ${isActive('/Add_pet2') ? 'disabled' : ''}`} aria-current="page">Добавить объявление</Link>
               </li>
             </ul>
             <form className="d-flex" onSubmit={handleSearch}>
-              <input 
-                className="form-control me-2" 
-                type="search" 
-                placeholder="Поиск" 
-                aria-label="Search" 
-                value={searchQuery} 
-                onChange={(e) => setSearchQuery(e.target.value)} 
+              <input
+                className="form-control me-2"
+                type="search"
+                placeholder="Поиск"
+                aria-label="Search"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
               />
+              {searchQuery.length >= 3 && (
+                <div className="position-absolute bg-white border mt-1 p-2 w-100">
+                  {loading ? (
+                    <div>Загрузка...</div>
+                  ) : suggestions.length > 0 ? (
+                    suggestions.map((item) => (
+                      <div key={item.id} className="py-1 card border-0">
+                        <Link to={`/pet/${item.id}`} className="text-decoration-none d-flex align-items-center">
+                          <div>
+                            <div className="fw-bold">{item.description}</div>
+                            <div className="text-muted">{item.kind}</div>
+                          </div>
+                        </Link>
+                      </div>
+                    ))
+                  ) : (
+                    <div>Нет результатов</div>
+                  )}
+                </div>
+              )}
               <button className="btn btn-primary me-4" type="submit">Поиск</button> {/* Увеличен отступ между кнопками */}
               <button type="button" className="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal1">Вход</button>
             </form>
